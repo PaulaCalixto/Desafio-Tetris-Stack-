@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tetris Stack</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1e1e1e;
+      color: white;
+      text-align: center;
+      padding: 30px;
+    }
+
+    h1 {
+      color: #00ffff;
+    }
+
+    .fila {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .peca {
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 24px;
+      border: 2px solid white;
+    }
+
+    .I { background-color: cyan; color: black; }
+    .O { background-color: yellow; color: black; }
+    .T { background-color: purple; }
+    .L { background-color: orange; }
+
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 6px;
+      background-color: #00ffff;
+      color: black;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: #00dddd;
+    }
+  </style>
+</head> 
+<body>
+
+  <h1>🧱 Tetris Stack - Fila de Peças</h1>
+
+  <div class="fila" id="fila"></div>
+
+  <div>
+    <button onclick="jogarPeca()">Jogar Peça (Dequeue)</button>
+    <button onclick="adicionarPeca()">Nova Peça (Enqueue)</button>
+  </div>
+
+  <script>
+    const tipos = ['I', 'O', 'T', 'L'];
+    const MAX_FILA = 5;
+    let fila = [];
+    let proximoId = 0;
+
+    // Gera uma nova peça aleatória
+    function gerarPeca() {
+      const tipo = tipos[Math.floor(Math.random() * tipos.length)];
+      return { tipo, id: proximoId++ };
+    }
+
+    // Atualiza a visualização da fila
+    function renderizarFila() {
+      const filaDiv = document.getElementById('fila');
+      filaDiv.innerHTML = '';
+
+      if (fila.length === 0) {
+        filaDiv.innerHTML = '<p>Fila vazia</p>';
+        return;
+      }
+
+      fila.forEach(peca => {
+        const div = document.createElement('div');
+        div.classList.add('peca', peca.tipo);
+        div.textContent = peca.tipo;
+        filaDiv.appendChild(div);
+      });
+    }
+
+    // Remove peça da frente
+    function jogarPeca() {
+      if (fila.length === 0) {
+        alert("Fila vazia! Nenhuma peça para jogar.");
+        return;
+      }
+
+      const jogada = fila.shift();
+      alert(`Peça jogada: ${jogada.tipo} (${jogada.id})`);
+      renderizarFila();
+    }
+
+    // Adiciona nova peça ao final
+    function adicionarPeca() {
+      if (fila.length >= MAX_FILA) {
+        alert("Fila cheia! Remova uma peça antes de adicionar.");
+        return;
+      }
+
+      const nova = gerarPeca();
+      fila.push(nova);
+      renderizarFila();
+    }
+
+    // Inicializa com 5 peças
+    function iniciarFila() {
+      for (let i = 0; i < MAX_FILA; i++) {
+        fila.push(gerarPeca());
+      }
+      renderizarFila();
+    }
+
+    // Inicia ao carregar
+    iniciarFila();
+  </script>
+
+</body>
+</html>
